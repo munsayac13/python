@@ -18,6 +18,15 @@ async def task3():
 
 async def main():
     await asyncio.gather(task1(), task2(), task3())  # Runs both tasks together
+    #results = await asyncio.gather(task3(), task1(), task2())
+    #print(type(results))
+
+    #task1_instance = asyncio.create_task(task1())
+    #task2_instance = asyncio.create_task(task2())
+    #task3_instance = asyncio.create_task(task3())
+    #await task1_instance
+    #await task2_instance
+    #await task3_instance
 
 asyncio.run(main())
 
