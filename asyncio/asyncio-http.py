@@ -18,3 +18,29 @@ async def func():
 
 
 asyncio.run(func())
+
+
+async def get_url_text(session, url):
+    async with session.get(url) as response:
+        return await response.text()
+
+async def functwo():
+    urls = [
+        "https://example.com",
+        "https://httpbin.org/get",
+        "https://python.org"
+    ]
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = [get_url_text(session, url) for url in urls]
+        responses = await asyncio.gather(*tasks)
+
+        # Print type
+        print(type(responses))
+
+        for url, response in zip(urls, responses):
+            print(f"URL: {url} - Length of response: {len(response)} characters")
+
+asyncio.run(functwo())
+
+
