@@ -1,5 +1,6 @@
 import psycopg2
 from config import load_config
+import connect
 
 def create_tables():
     commands = (
@@ -41,7 +42,7 @@ def create_tables():
 
     try:
         config = load_config()
-        with psycopg2.connect(**config) as conn:
+        with connect.connect_to_database(config) as conn:
             with conn.cursor() as cur:
                 for command in commands:
                     print(command)

@@ -3,7 +3,7 @@ from config import load_config
 
 # psycop2.extensions.connection does not support the asynchronous context manager protocol
 # therefore async and await cannot be used
-def connect(config):
+def connect_to_database(config):
     try:
         # The ** argument in Python functions allows a function to accept an arbitrary number of keyword arguments. These arguments are passed to the function as a dictionary, where the keys are the argument names and the values are the argument values. This is useful when you want to create a function that can accept a variable number of named options or settings.
         with psycopg2.connect(**config) as conn:
@@ -14,4 +14,4 @@ def connect(config):
 
 if __name__ == '__main__':
     config = load_config()
-    connect(config)
+    connect_to_database(config)
