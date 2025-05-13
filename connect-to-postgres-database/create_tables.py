@@ -18,7 +18,7 @@ def create_tables():
         """,
         """
         CREATE TABLE operatingsystemsVersions(
-            systemId INTEGER PRIMARY KEY,
+            osvId INTEGER PRIMARY KEY,
             versionName VARCHAR(255) NOT NULL,
             FOREIGN KEY (systemId)
             REFERENCES operatingsystems (systemId) 

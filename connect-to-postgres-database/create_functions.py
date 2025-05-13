@@ -3,6 +3,9 @@ from config import load_config
 import connect
 
 def create_functions():
+    """
+    FUNCTIONS returns VALUE. STORED PROCEDURE does not return any VALUE.
+    """
     GETOSVERBYDISTROSQL="""
     CREATE OR REPLACE FUNCTION get_operatingsystems_versions_by_distro(distro VARCHAR) RETURNS TABLE(systemid INTEGER, versionname VARCHAR) AS
     $$
