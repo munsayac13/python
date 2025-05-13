@@ -11,18 +11,19 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE computers(
-            computerId SERIAL PRIMARY KEY,
-            computerName VARCHAR(255) NOT NULL
-        )
-        """,
-        """
         CREATE TABLE operatingsystemsVersions(
-            osvId INTEGER PRIMARY KEY,
+            osvId SERIAL PRIMARY KEY,
+            systemId INT NOT NULL,
             versionName VARCHAR(255) NOT NULL,
             FOREIGN KEY (systemId)
             REFERENCES operatingsystems (systemId) 
             ON UPDATE CASCADE ON DELETE CASCADE
+        )
+        """,
+        """
+        CREATE TABLE computers(
+            computerId SERIAL PRIMARY KEY,
+            computerName VARCHAR(255) NOT NULL
         )
         """,
         """
