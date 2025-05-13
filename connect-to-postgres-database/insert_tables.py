@@ -40,9 +40,14 @@ def insert_operatingsystems(systemName):
                     systemId = rows[0]
                     print("New SystemId:", systemId)
                 conn.commit()
+                cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
+        if conn:
+            conn.rollback()
         print(error)
     finally:
+        if conn:
+            conn.close()
         return systemId
     
 def insert_multiple_operatingsystems(systemNames):
@@ -82,12 +87,16 @@ def insert_multiple_operatingsystems(systemNames):
                 for systemName in systemNames:
                     cur.execute(SELECTSQL, (systemName,))
                     row = cur.fetchone()
-                    systemId.append(row[0])
-                
+                    systemId.append(row[0])     
                 conn.commit()
+                cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
+        if conn:
+            conn.rollback()
         print(error)
     finally:
+        if conn:
+            conn.close()
         return systemId
     
 
@@ -113,9 +122,14 @@ def insert_operatingsystemsVersions(systemId, versionName):
                     versionName = rows[0]
                     print("Version Name:", versionName)
                 conn.commit()
+                cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
+        if conn:
+            conn.rollback()
         print(error)
-    #finally:
+    finally:
+        if conn:
+            conn.close()
     #    return systemId
     
 if __name__ == "__main__":

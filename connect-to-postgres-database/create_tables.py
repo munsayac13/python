@@ -47,8 +47,12 @@ def create_tables():
                 for command in commands:
                     print(command)
                     cur.execute(command)
+                cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
         print(error)
+    finally:
+        if conn:
+            conn.close()
 
 if __name__ == '__main__':
     create_tables()

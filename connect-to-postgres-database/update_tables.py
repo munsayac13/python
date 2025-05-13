@@ -26,11 +26,15 @@ def update_operatingsystemsversions(systemId, currentVersionName, newVersionName
                 rows = cur.fetchone()
                 print(rows)
                 versionName=rows[1]
-
             conn.commit()
+            cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
+        if conn:
+            conn.rollback()
         print(error)
     finally:
+        if conn:
+            conn.close()
         return versionName
 
 if __name__ == "__main__":

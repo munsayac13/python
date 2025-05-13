@@ -14,9 +14,12 @@ def get_operatingsystems():
                 cur.execute(QUERYSQL)
                 rows = cur.fetchall()
                 #print(rows)
+                cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
         print(error)
     finally:
+        if conn:
+            conn.close()
         return rows
     
 def get_operatingsystems_and_versions():
@@ -39,9 +42,12 @@ def get_operatingsystems_and_versions():
             with conn.cursor() as cur:
                 cur.execute(QUERYSQL)
                 rows = cur.fetchall()
+                cur.close()
     except (psycopg2.DatabaseError, Exception) as error:
         print(error)
     finally:
+        if conn:
+            conn.close()
         return rows
     
 if __name__ == "__main__":
