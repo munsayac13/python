@@ -127,6 +127,7 @@ if __name__ == "__main__":
     
     SYSIDTHREE=insert_operatingsystems("WINDOWS XP")
     print("############")
+    
     insert_multiple_operatingsystems(
         [
             ("DEBIAN",),
