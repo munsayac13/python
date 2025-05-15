@@ -1,7 +1,7 @@
 ######## 
 To run python scripts in this folder install the following packages via pip3
 
-pip3 install wheel psycopg2-binary paramiko requests beautifulsoup4 pandas aiohttp aiofiles asyncio fastapi numpy pytest ConfigParser
+pip3 install wheel psycopg2-binary paramiko requests beautifulsoup4 pandas aiohttp aiofiles asyncio fastapi numpy pytest ConfigParser pylance setuptools
 
 OR
 

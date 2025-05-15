@@ -6,3 +6,8 @@ pandas
 aiohttp
 aiofiles
 asyncio
+pylance
+setuptools
+scikit-learn
+twine
+build
