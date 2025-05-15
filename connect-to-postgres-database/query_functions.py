@@ -15,7 +15,7 @@ def get_operatingsystems_versions_by_distro(distro):
         print(error)
     finally:
         if conn:
-            conn.close()    
+            conn.close()
 
 if __name__ == "__main__":
     get_operatingsystems_versions_by_distro("DEBIAN")

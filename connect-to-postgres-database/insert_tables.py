@@ -131,7 +131,26 @@ def insert_operatingsystemsVersions(systemId, versionName):
         if conn:
             conn.close()
     #    return systemId
-    
+
+
+def insert_blob_binary_to_database(computerId, fileName, binaryPath):
+    data = open(binaryPath, 'rb').read()
+    INSERTSQL="""
+    INSERT INTO binaryfiles(computerId, filename, binaryPath) VALUES (%s, %s, %s)"
+    """
+    try:
+        config = load_config()
+        with connect.connect_to_database(config) as conn:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO")
+    except (psycopg2.DatabaseError, Exception) as error:
+        if conn:
+            conn.rollback()
+        print(error)
+    finally:
+        if conn:
+            conn.close()
+
 if __name__ == "__main__":
     SYSIDONE=insert_operatingsystems("WINDOWS 99")
     print("############")
@@ -156,3 +175,6 @@ if __name__ == "__main__":
     print("############")
     insert_operatingsystemsVersions(6, "centos-linux_x64_10.80")
     print("############")
+
+    insert_blob_binary_to_database(4, "simpletextfile", "/tmp/simpleTextFile.tar.gz")
+    insert_blob_binary_to_database(5, "python", "/tmp/python3.13")

@@ -38,6 +38,17 @@ def create_tables():
                 REFERENCES operatingsystems (systemId)
                 ON UPDATE CASCADE ON DELETE CASCADE
         )
+        """,
+        """
+        CREATE TABLE binaryfiles(
+            binaryId SERIAL PRIMARY KEY,
+            computerId INT NOT NULL,
+            fileName VARCHAR(255) NOT NULL,
+            binaryPath BYTEA NOT NULL,
+            FOREIGN KEY (computerId)
+            REFERENCES computers (computerId) 
+            ON UPDATE CASCADE ON DELETE CASCADE
+        )
         """
     )
 
