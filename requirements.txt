@@ -11,3 +11,11 @@ setuptools
 scikit-learn
 twine
 build
+pipenv
+anyio
+pytest-asyncio
+pytest-tornasync
+pytest-trio
+pytest-twisted
+kubernetes
+discord-webhook
