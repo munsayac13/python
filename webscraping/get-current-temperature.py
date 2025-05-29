@@ -48,19 +48,31 @@ def get_weather_temperature(city: str):
 
     dayofweek = ''
     temperature = ''
+    weathertype = ''
 
     for d in result:
         dayofweekdata = d.find('div', attrs={'class':'Z1VzSb'})
         temperaturedata = d.find('span', attrs={'class':'wob_t'})
+        weathertypedata = d.find('img', attrs={'class':'YQ4gaf zr758c'})
         #print(dayofweekdata)
         #print(temperaturedata)
+        #print(weathertypedata)
         
         dayofweek = [c.get_text(strip=True) for c in dayofweekdata]
         temperature = [b.get_text(strip=True) for b in temperaturedata]
+        weathertype = weathertypedata['alt']
         #print(dayofweek[0])
         #print(temperature[0])
-    
+        #print(weathertype)
+
     print("Today's Temperature: {} {} degrees fahrenheit".format(dayofweek[0], temperature[0]))
+    if weathertype == "Light rain":
+        print("Its {}! You might need umbrella.".format(weathertype))
+    elif weathertype == "Rain":
+        print("Its {}! You need umbrella.".format(weathertype))
+    else:
+        print("Its {}! Enjoy outside.".format(weathertype))
+
 
 if __name__ == "__main__":
     get_weather_temperature('Chicago')
