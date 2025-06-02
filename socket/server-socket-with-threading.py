@@ -64,12 +64,13 @@ def run_server():
     print(timenow() + ' ' + f"Listening on {server_ip}:{port}")
 
     try:             
-        # accept a client connection
-        client_socket, addr = server.accept()
-        print(timenow() + ' ' + f"Accepted connection from {addr[0]}:{addr[1]}")
-        # start a new thread to handle the client
-        thread = threading.Thread(target=handle_client, args=(client_socket, addr,))
-        thread.start()
+        while True:
+            # accept a client connection
+            client_socket, addr = server.accept()
+            print(timenow() + ' ' + f"Accepted connection from {addr[0]}:{addr[1]}")
+            # start a new thread to handle the client
+            thread = threading.Thread(target=handle_client, args=(client_socket, addr,))
+            thread.start()
     except KeyboardInterrupt:
         print("\n"+ timenow() + ' ' + f"Error: Interrupted by user")
     except Exception as e:
