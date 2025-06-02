@@ -1,9 +1,10 @@
 import socket
 import threading
 import datetime
-import sys
-import signal
 import time
+import multiprocessing
+#import sys
+#import signal
 
 from flask import Flask, render_template
 
@@ -53,51 +54,62 @@ def run_flask():
     app.run(port=5000, debug=True, use_reloader=False, threaded=True)
 
 def run_server():
+    
+    # create a socket object
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # bind the socket to the host and port
+    server.bind((server_ip, port))
+    # listen for incoming connections
+    server.listen()
+    print(timenow() + ' ' + f"Listening on {server_ip}:{port}")
 
-    try:
-        # create a socket object
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # bind the socket to the host and port
-        server.bind((server_ip, port))
-        # listen for incoming connections
-        server.listen()
-        print(timenow() + ' ' + f"Listening on {server_ip}:{port}")
-
-        while True:
-            # accept a client connection
-            client_socket, addr = server.accept()
-            print(timenow() + ' ' + f"Accepted connection from {addr[0]}:{addr[1]}")
-            # start a new thread to handle the client
-            thread = threading.Thread(target=handle_client, args=(client_socket, addr,))
-            thread.start()
+    try:             
+        # accept a client connection
+        client_socket, addr = server.accept()
+        print(timenow() + ' ' + f"Accepted connection from {addr[0]}:{addr[1]}")
+        # start a new thread to handle the client
+        thread = threading.Thread(target=handle_client, args=(client_socket, addr,))
+        thread.start()
     except KeyboardInterrupt:
         print("\n"+ timenow() + ' ' + f"Error: Interrupted by user")
     except Exception as e:
         print(timenow() + ' ' + f"Error: {e}")
-    finally:
-        server.close()
-        print(timenow() + ' ' + f"Info: Server socket closed")
-
-def signal_handler(sig, frame):
-    print(timenow() + ' ' + f"Info: Signal received, shutting down flask and socket ...")
-    sys.exit(0)
-
+    server.close()
+    print(timenow() + ' ' + f"Info: Server socket closed")   
+    
+#def signal_handler(sig, frame):
+#    print(timenow() + ' ' + f"Info: Signal received, shutting down flask and socket ...")
+#    sys.exit(0)
 
 if __name__ == "__main__":
+    
+    #flask_process = multiprocessing.Process(target=run_flask, args=(shutdown_event,))
+    flask_process = multiprocessing.Process(target=run_flask)
+    #socket_process = multiprocessing.Process(target=run_server, args=(shutdown_event,))
+    socket_process = multiprocessing.Process(target=run_server)
 
-    signal.signal(signal.SIGINT, signal_handler)
+    flask_process.start()
+    socket_process.start()
 
-    stop_thread = False
-    flask_thread = threading.Thread(target=run_flask)
-    flask_thread.daemon = True
-    flask_thread.start()       
-    socket_thread = threading.Thread(target=run_server)
-    socket_thread.daemon = True
-    socket_thread.start()
-
-    print(timenow() + ' ' + 'Info: Threads started ...')
-    while True:
-        try:
+    try:
+        while True:
             time.sleep(1)
-        except KeyboardInterrupt:
-            break
+    except KeyboardInterrupt:
+        print(timenow() + ' ' + "Info: Shutting down Flask and Socket services ...")
+        flask_process.terminate()
+        socket_process.terminate()
+        print(timenow() + ' ' + "Info: all services terminated.")
+
+#    signal.signal(signal.SIGINT, signal_handler)
+#    signal.signal(signal.SIGTERM, signal_handler)
+#    
+#    flask_thread = threading.Thread(target=run_flask)
+#    flask_thread.daemon = True
+#    
+#    socket_thread = threading.Thread(target=run_server)
+#    socket_thread.daemon = True
+#    
+#    flask_thread.start()       
+#    socket_thread.start()
+
+
