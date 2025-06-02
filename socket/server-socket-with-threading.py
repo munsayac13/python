@@ -1,6 +1,27 @@
 import socket
 import threading
 import datetime
+import sys
+import signal
+import time
+
+from flask import Flask, render_template
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'verysecret'
+
+server_name = socket.gethostname()
+#server_ip = socket.gethostbyname(server_name)
+server_ip = '127.0.0.1'
+port = 8000
+
+@app.route('/')
+def index():
+    return "Welcome to CM Flask app"
+
+@app.route('/getserver')
+def getserver_page():
+    return render_template('server.html', host=server_name, port=port)
 
 def timenow() -> str:
     return str(datetime.datetime.now())
@@ -24,11 +45,15 @@ def handle_client(client_socket, addr):
         client_socket.close()
         print(timenow() + ' ' + f"Connection to client ({addr[0]}:{addr[1]}) closed")
 
+def run_flask():
+    # Allow all host to access server
+    #app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False, threaded=True)
+    
+    # Allow only local host to access server
+    app.run(port=5000, debug=True, use_reloader=False, threaded=True)
 
 def run_server():
-    server_ip = "127.0.0.1"  # server hostname or IP address
-    port = 8000              # server port number
-    
+
     try:
         # create a socket object
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -53,6 +78,26 @@ def run_server():
         server.close()
         print(timenow() + ' ' + f"Info: Server socket closed")
 
+def signal_handler(sig, frame):
+    print(timenow() + ' ' + f"Info: Signal received, shutting down flask and socket ...")
+    sys.exit(0)
+
+
 if __name__ == "__main__":
-    run_server()
-    
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+    stop_thread = False
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()       
+    socket_thread = threading.Thread(target=run_server)
+    socket_thread.daemon = True
+    socket_thread.start()
+
+    print(timenow() + ' ' + 'Info: Threads started ...')
+    while True:
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt:
+            break
