@@ -14,7 +14,6 @@ while True:
     match action:
         case 'install':
             try:
-
                 # Choose program to install
                 program_to_install = input ("Type program to install: ")
                 print("Installing Program: ", program_to_install)
@@ -38,7 +37,7 @@ while True:
             subprocess.run(["sudo", "apt", "list", "--installed"])
 
         case 'exit':
-            
             break
+
 print("Thanks for using! We'll see you next time.")
 print("Good Bye!")
