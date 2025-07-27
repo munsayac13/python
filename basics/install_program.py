@@ -39,5 +39,9 @@ while True:
         case 'exit':
             break
 
+        case _:
+            print("Please type valid commands ...")
+
+
 print("Thanks for using! We'll see you next time.")
 print("Good Bye!")
